@@ -2,12 +2,12 @@ package com.android.retrofit3.retrofit.models
 
 import com.google.gson.annotations.SerializedName
 
-class Post {
-    var userId:Int?=0
+class Post(
+    var userId: Int?,
+    var title: String?,
+    @SerializedName("body") var text: String?,
+    var id: Int? = null
+) {
 
-    var id :Int?=null
 
-    var title:String?=null
-    @SerializedName("body")
-    var text:String?=null
 }

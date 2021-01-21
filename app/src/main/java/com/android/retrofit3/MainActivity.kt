@@ -21,16 +21,49 @@ class MainActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        val hash=HashMap<String,String>()
-        hash["userId"] = "1"
-        hash["_sort"] = "id"
-        hash["_order"] = "desc"
-        getPosts(hash)
-       // getComments(8)
+//        val hash=HashMap<String,String>()
+//        hash["userId"] = "1"
+//        hash["_sort"] = "id"
+//        hash["_order"] = "desc"
+//        getPosts(hash)
+        // getComments(8)
+
+        createPost()
+    }
+
+    private fun createPost() {
+        val post = Post(32, "asda", "dasda")
+        val postService = ServiceBuilder.buildService(JsonPlaceHolderApi::class.java)
+
+        val call = postService.createPost(post)
+        call.enqueue(object : Callback<Post> {
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                if (response.isSuccessful) {
+                    text_view_result.text = ""
+                    val posts: Post = response.body()!!
+                    var content = ""
+                    content += "ID: " + post.id + "\n"
+                    content += "User ID:" + post.userId + "\n"
+                    content += "Title:" + post.title + "\n"
+                    content += "Text:" + post.text + "\n\n"
+                    text_view_result.append(content)
+
+                }
+                else{text_view_result.text=response.code().toString()}
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+
+        })
+
+
     }
 
 
-    private fun getPosts(hash:HashMap<String,String>) {
+    private fun getPosts(hash: HashMap<String, String>) {
         val postService = ServiceBuilder.buildService(JsonPlaceHolderApi::class.java)
         val call = postService.getPosts(hash)
         call.enqueue(object : Callback<List<Post>> {
@@ -39,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                     text_view_result.text = ""
                     val posts: List<Post> = response.body()!!
                     for (post in posts) {
-                        var content= ""
+                        var content = ""
                         content += "ID: " + post.id + "\n"
                         content += "User ID:" + post.userId + "\n"
                         content += "Title:" + post.title + "\n"
@@ -50,6 +83,7 @@ class MainActivity : AppCompatActivity() {
                     text_view_result.text = response.code().toString()
                 }
             }
+
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
                 Log.d(TAG, "onResponse: ${t.message}")
 
@@ -58,27 +92,24 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    fun getComments( id:Int) {
+    fun getComments(id: Int) {
         val postService = ServiceBuilder.buildService(JsonPlaceHolderApi::class.java)
         val call = postService.getComments(id)
+
         call.enqueue(object : Callback<List<Comment>> {
             override fun onResponse(call: Call<List<Comment>>, response: Response<List<Comment>>) {
-                if (response.isSuccessful)
-                {
-                    val comments:List<Comment> = response.body()!!
-                    for (com in comments)
-                    {
-                        var content= ""
+                if (response.isSuccessful) {
+                    val comments: List<Comment> = response.body()!!
+                    for (com in comments) {
+                        var content = ""
                         content += "ID: " + com.getId() + "\n"
                         content += "User ID:" + com.getId() + "\n"
                         content += "Title:" + com.getName() + "\n"
                         content += "Text:" + com.getText() + "\n\n"
                         text_view_result.append(content)
                     }
-                }
-                else
-                {
-                  text_view_result.text=response.code().toString()
+                } else {
+                    text_view_result.text = response.code().toString()
                 }
             }
 
