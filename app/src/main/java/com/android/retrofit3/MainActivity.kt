@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-import com.android.retrofit3.retrofit.JsonPlaceHolderApi
+import com.android.retrofit3.retrofit.api.JsonPlaceHolderApi
 import com.android.retrofit3.retrofit.models.Post
 import com.android.retrofit3.retrofit.ServiceBuilder
 import com.android.retrofit3.retrofit.models.Comment
@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
        // getComments(8)
     }
 
-    fun getPosts(hash:HashMap<String,String>) {
+
+    private fun getPosts(hash:HashMap<String,String>) {
         val postService = ServiceBuilder.buildService(JsonPlaceHolderApi::class.java)
         val call = postService.getPosts(hash)
         call.enqueue(object : Callback<List<Post>> {
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     text_view_result.text = ""
                     val posts: List<Post> = response.body()!!
                     for (post in posts) {
-                        var content: String = ""
+                        var content= ""
                         content += "ID: " + post.id + "\n"
                         content += "User ID:" + post.userId + "\n"
                         content += "Title:" + post.title + "\n"
@@ -56,6 +57,7 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
+
     fun getComments( id:Int) {
         val postService = ServiceBuilder.buildService(JsonPlaceHolderApi::class.java)
         val call = postService.getComments(id)
@@ -66,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                     val comments:List<Comment> = response.body()!!
                     for (com in comments)
                     {
-                        var content: String = ""
+                        var content= ""
                         content += "ID: " + com.getId() + "\n"
                         content += "User ID:" + com.getId() + "\n"
                         content += "Title:" + com.getName() + "\n"

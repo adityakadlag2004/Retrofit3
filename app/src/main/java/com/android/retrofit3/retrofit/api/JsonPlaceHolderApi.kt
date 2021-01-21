@@ -1,4 +1,4 @@
-package com.android.retrofit3.retrofit
+package com.android.retrofit3.retrofit.api
 
 import com.android.retrofit3.retrofit.models.Comment
 import com.android.retrofit3.retrofit.models.Post
