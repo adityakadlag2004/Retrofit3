@@ -1,4 +1,4 @@
-package com.android.retrofit3.retrofit
+package com.android.retrofit3.retrofit.models
 
 import com.google.gson.annotations.SerializedName
 
