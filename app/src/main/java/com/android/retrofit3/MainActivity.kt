@@ -28,11 +28,12 @@ class MainActivity : AppCompatActivity() {
 //        getPosts(hash)
         // getComments(8)
 
-        createPost()
+        updatePost()
+       // createPost()
     }
 
     private fun createPost() {
-        val post = Post(32, "asda", "dasda")
+        val post = Post(2, "New Title", "New Post")
         val postService = ServiceBuilder.buildService(JsonPlaceHolderApi::class.java)
 
         val call = postService.createPost(post)
@@ -42,18 +43,19 @@ class MainActivity : AppCompatActivity() {
                     text_view_result.text = ""
                     val posts: Post = response.body()!!
                     var content = ""
-                    content += "ID: " + post.id + "\n"
-                    content += "User ID:" + post.userId + "\n"
-                    content += "Title:" + post.title + "\n"
-                    content += "Text:" + post.text + "\n\n"
+                    content += "ID: " + posts.id + "\n"
+                    content += "User ID:" + posts.userId + "\n"
+                    content += "Title:" + posts.title + "\n"
+                    content += "Text:" + posts.text + "\n\n"
                     text_view_result.append(content)
 
+                } else {
+                    text_view_result.text = response.code().toString()
                 }
-                else{text_view_result.text=response.code().toString()}
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d(TAG, "onFailure: ${t.message}")
             }
 
 
@@ -61,8 +63,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
-
     private fun getPosts(hash: HashMap<String, String>) {
         val postService = ServiceBuilder.buildService(JsonPlaceHolderApi::class.java)
         val call = postService.getPosts(hash)
@@ -86,12 +86,10 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
                 Log.d(TAG, "onResponse: ${t.message}")
-
             }
 
         })
     }
-
     fun getComments(id: Int) {
         val postService = ServiceBuilder.buildService(JsonPlaceHolderApi::class.java)
         val call = postService.getComments(id)
@@ -116,8 +114,38 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<Comment>>, t: Throwable) {
                 TODO("Not yet implemented")
             }
+        })
+    }
+    private fun updatePost() {
+        val post = Post(12, null, "New Updated Post")
+        val postService = ServiceBuilder.buildService(JsonPlaceHolderApi::class.java)
+
+        val call = postService.patchPost(2,post)
+        call.enqueue(object : Callback<Post> {
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                if (response.isSuccessful) {
+                    text_view_result.text = ""
+                    val posts: Post = response.body()!!
+                    var content = ""
+                    content += "ID: " + posts.id + "\n"
+                    content += "User ID:" + posts.userId + "\n"
+                    content += "Title:" + posts.title + "\n"
+                    content += "Text:" + posts.text + "\n\n"
+                    text_view_result.text=content
+
+                } else {
+                    text_view_result.text = response.code().toString()
+                }
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                Log.d(TAG, "onFailure: ${t.message}")
+            }
 
 
         })
+
+
     }
+
 }

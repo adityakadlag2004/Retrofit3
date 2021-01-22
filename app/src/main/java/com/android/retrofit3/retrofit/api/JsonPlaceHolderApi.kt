@@ -27,4 +27,11 @@ interface JsonPlaceHolderApi {
     fun createPost(@Body post: Post):Call<Post>
 
 
+    @PUT("posts/{id}")
+    fun updatePost(@Path("id") id:Int,@Body post:Post):Call<Post>
+
+    @PATCH("posts/{id}")
+    fun patchPost(@Path("id") id:Int,@Body post:Post):Call<Post>
+
+
 }
